@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -32,6 +33,12 @@ public class ImagePicker extends CordovaPlugin {
     private static final int PERMISSION_REQUEST_CODE = 100;
 
     private CallbackContext callbackContext;
+
+    public void custom(String action) {
+        Log.w("ImagePicker", "LOGGGING ACTION!!!");
+        Log.w("ImagePicker", action);
+        Log.w("ImagePicker", "LOGGGING ACTION END!!!!!");
+    }
 
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;

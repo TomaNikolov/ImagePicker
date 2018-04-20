@@ -5,7 +5,32 @@
  * Developed by Wymsee for Sync OnSet
  */
 
-var ImagePicker = function() {
+const cordova = {
+	exec: (successCallback, errorCallback, serviceName, actionName, actionArgs) => {
+		// const callbackContextInnerObj = {};
+		// if (successCallback) {
+		// 	callbackContextInnerObj.success = function() {
+		// 		return successCallback();
+		// 	}
+		// }
+
+		// if(errorCallback) {
+		// 	callbackContextInnerObj.error = errorCallback;
+		// }
+		const CallbackContext = org.apache.cordova.CallbackContext.extend({
+			sendPluginResult: function(pluginResult) {
+				console.log("SUCCESS CALLED!! Status", pluginResult.getStatus());
+				console.log("SUCCESS CALLED!! getMessageType", pluginResult.getMessageType());
+				console.log("SUCCESS CALLED!! getStrMessage", pluginResult.getStrMessage());
+				successCallback();
+			}
+		});
+
+		new org.apache.cordova.PluginManager(new CallbackContext("123")).exec(serviceName, actionName, new org.json.JSONArray(JSON.stringify(actionArgs)));
+	}
+}
+
+var ImagePicker = function () {
 
 };
 
@@ -14,22 +39,22 @@ ImagePicker.prototype.OutputType = {
 	BASE64_STRING: 1
 };
 
-ImagePicker.prototype.validateOutputType = function(options){
+ImagePicker.prototype.validateOutputType = function (options) {
 	var outputType = options.outputType;
-	if(outputType){
-		if(outputType !== this.OutputType.FILE_URI && outputType !== this.OutputType.BASE64_STRING){
+	if (outputType) {
+		if (outputType !== this.OutputType.FILE_URI && outputType !== this.OutputType.BASE64_STRING) {
 			console.log('Invalid output type option entered. Defaulting to FILE_URI. Please use window.imagePicker.OutputType.FILE_URI or window.imagePicker.OutputType.BASE64_STRING');
 			options.outputType = this.OutputType.FILE_URI;
 		}
 	}
 };
 
-ImagePicker.prototype.hasReadPermission = function(callback) {
-  return cordova.exec(callback, null, "ImagePicker", "hasReadPermission", []);
+ImagePicker.prototype.hasReadPermission = function (callback) {
+	return cordova.exec(callback, null, "ImagePicker", "hasReadPermission", []);
 };
 
-ImagePicker.prototype.requestReadPermission = function(callback) {
-  return cordova.exec(callback, null, "ImagePicker", "requestReadPermission", []);
+ImagePicker.prototype.requestReadPermission = function (callback) {
+	return cordova.exec(callback, null, "ImagePicker", "requestReadPermission", []);
 };
 
 /*
@@ -46,7 +71,7 @@ ImagePicker.prototype.requestReadPermission = function(callback) {
 *       .outputType - type of output returned. defaults to file URIs.
 *					  Please see ImagePicker.OutputType for available values.
 */
-ImagePicker.prototype.getPictures = function(success, fail, options) {
+ImagePicker.prototype.getPictures = function (success, fail, options) {
 	if (!options) {
 		options = {};
 	}
@@ -68,4 +93,4 @@ ImagePicker.prototype.getPictures = function(success, fail, options) {
 	return cordova.exec(success, fail, "ImagePicker", "getPictures", [params]);
 };
 
-window.imagePicker = new ImagePicker();
+module.exports = new ImagePicker();
