@@ -20,19 +20,21 @@ package org.apache.cordova;
 
 import org.json.JSONArray;
 
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONObject;
-import android.util.Log;
 
 public class CallbackContext {
     private static final String LOG_TAG = "CordovaPlugin";
 
     private String callbackId;
+    private CordovaWebView webView;
     protected boolean finished;
     private int changingThreads;
 
-    public CallbackContext(String callbackId) {
+    public CallbackContext(String callbackId, CordovaWebView webView) {
         this.callbackId = callbackId;
+        this.webView = webView;
     }
 
     public boolean isFinished() {
@@ -50,15 +52,13 @@ public class CallbackContext {
     public void sendPluginResult(PluginResult pluginResult) {
         synchronized (this) {
             if (finished) {
-                Log.w(LOG_TAG, "Attempted to send a second callback for ID: " + callbackId + "\nResult was: " + pluginResult.getMessage());
+                LOG.w(LOG_TAG, "Attempted to send a second callback for ID: " + callbackId + "\nResult was: " + pluginResult.getMessage());
                 return;
             } else {
                 finished = !pluginResult.getKeepCallback();
             }
         }
-
-        Log.w(LOG_TAG, "SEND PLUGIN RESULT FOR CALLBACK: " + callbackId + "\nResult was: " + pluginResult.getMessage());
-        // webView.sendPluginResult(pluginResult, callbackId);
+        webView.sendPluginResult(pluginResult, callbackId);
     }
 
     /**
