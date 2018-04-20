@@ -7,6 +7,12 @@
   "repo": "https://github.com/Telerik-Verified-Plugins/ImagePicker",
   "issue": "",
   "keywords": [],
+  "nativescript": {
+    "platforms": {
+      "android": "4.0.0",
+      "ios": "4.0.0"
+    }
+  },
   "platforms": [
     "android",
     "ios"
