@@ -139,8 +139,9 @@ public class ImagePicker extends CordovaPlugin {
             callbackContext.error(error);
 
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            JSONArray res = new JSONArray();
-            callbackContext.success(res);
+            // JSONArray res = new JSONArray();
+            // callbackContext.success(res);
+            callbackContext.error("Error ima");
 
         } else {
             callbackContext.error("No images selected");
